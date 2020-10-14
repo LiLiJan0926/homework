@@ -1,0 +1,149 @@
+// The day.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+//
+
+#include <iostream>
+#include<stdio.h>
+using namespace std;
+int months[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+bool IsRunNian(int year) {
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+		//（1）不是世纪年，能被4整除并且不能被100整除；（2）世纪年，能被400整除
+		return true;
+	else
+		return false;
+}
+int main() {
+	int year = 0, month = 0, day = 0;
+	int howmanydays = 0;
+	cin >> year >> month >> day;
+	if (month < 3)//月份小于2
+		printf("%d\n", 31 + day);
+	else { //月份大于2时
+		for (int i = 0; i < month - 1; i++) howmanydays += months[i];
+		if (IsRunNian(year)) {//是闰年
+			printf("%d\n", howmanydays + day + 1);
+		}
+		else {//不是闰年
+			printf("%d\n", howmanydays + day);
+		}
+	}
+	system("pause");
+	return 0;
+}
+
+
+
+
+// 三角形面积.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+//
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <algorithm>
+#include <string.h>
+#include <cmath>
+#include <vector>
+#include <cstring>
+#include <set>
+#include <queue>
+#include <iomanip>
+#include <map>
+#include <stack>
+#include <set>
+#include <stdlib.h>
+
+using namespace std;
+#define ll long long
+#define ls (x << 1)
+#define rs (x << 1 | 1)
+const int inf = 0x3f3f3f3f;
+const int N = 2e5 + 7;
+const double PI = acos(-1);
+const int mod = 998244353;
+const double eps = 1e-7;
+double mianji(const double &a, const double &b, const double &c)
+{
+	double ans, p;
+	p = (a + b + c) / 2;
+	ans = sqrt(p * (p - a) * (p - b) * (p - c));
+	return ans;
+}
+int main()
+{
+	double a, b, c;
+	while (cin >> a >> b >> c) {
+		cout << mianji(a, b, c) << endl;
+	}
+	return 0;
+}
+
+
+
+
+// ConsoleApplication3.cpp: 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+
+#include<iostream>
+using namespace std;
+void swap(int *p1, int *p2)
+{
+	int t;
+	t = *p1;
+	*p1 = *p2;
+	*p2 = t;
+}
+
+int main()
+{
+	int a, b;
+	int*pointer_1, *pointer_2;
+	cin >> a >> b;
+	pointer_1 = &a;
+	pointer_2 = &b;
+	cout << "before is" << a << " " << b << endl;
+	swap(pointer_1, pointer_2);
+	cout << "after is" << a << " " << b << endl;
+	system("pause");
+	return 0;
+}
+
+
+// task1.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+//
+#include <math.h>
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	int a, b, c;
+	float m,x,x1,x2;
+	cin >> a >> b >> c;
+	m = b * b - 4*a*c;
+	if (m < 0);
+		cout << "此方程无实数解" << endl;//but have the the plural solution!
+	 if (m = 0);
+	{
+		x = (-b) / 2a;
+		cout << "此方程有且仅有唯一解x=" << endl;/*x1&x2相等*/
+	}
+	{
+		x1 = (-b + m ^ (1 / 2)) / 2a;
+		x2 = (-b - m ^ (1 / 2)) / 2a;
+		cout << "此方程有两个不同解分别为：x1=" << "x2=" << endl;
+	}
+	return 0;
+}
+
+// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
+// 调试程序: F5 或调试 >“开始调试”菜单
+
+// 入门使用技巧: 
+//   1. 使用解决方案资源管理器窗口添加/管理文件
+//   2. 使用团队资源管理器窗口连接到源代码管理
+//   3. 使用输出窗口查看生成输出和其他消息
+//   4. 使用错误列表窗口查看错误
+//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
+//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
