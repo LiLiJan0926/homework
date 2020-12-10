@@ -1,0 +1,671 @@
+任务一：
+1.#include <iostream>  
+2.  
+3.using namespace std;  
+4.  
+5.class Base  
+6.{  
+7.    static int cnt;  
+8.public:  
+9.    int a;  
+10.protected:  
+11.    int b;  
+12.private:  
+13.    int c;  
+14.  
+15.public:  
+16.    Base()  
+17.    {  
+18.        ++cnt;  
+19.        cout << "constructing Base, a = " << a << ", b = " << b << ", c = " << c << endl;  
+20.    }  
+21.    Base(int x, int y, int z)  
+22.    {  
+23.        ++cnt;  
+24.        a = x;  
+25.        b = y;  
+26.        c = z;  
+27.        cout << "constructing Base, a = " << a << ", b = " << b << ", c = " << c << endl;  
+28.    }  
+29.    ~Base()  
+30.    {  
+31.        --cnt;  
+32.        cout << "destructing Base, a = " << a << ", b = " << b << ", c = " << c << endl;  
+33.    }  
+34.  
+35.    int get_a()  
+36.    {  
+37.        return a;  
+38.    }  
+39.    int get_b()  
+40.    {  
+41.        return b;  
+42.    }  
+43.    int get_c()  
+44.    {  
+45.        return c;  
+46.    }  
+47.    static int statistic();  
+48.};  
+49.  
+50.int Base::cnt = 0;  
+51.  
+52.class Derived1 : public Base  
+53.{  
+54.private:  
+55.    int d1;  
+56.public:  
+57.    Derived1()  
+58.    {  
+59.        // cout << "constructing Derived1, a = " << a << ", b = " << b << ", c = " << c << "d1 = " << d1 << endl;  
+60.        // 报错，私有数据 c 虽然被子类继承，但是不可见，即具有不可访问属性  
+61.        cout << "constructing Derived1, a = " << a << ", b = " << b << ", c = " << get_c() << ", d1 = " << d1 << endl;  
+62.    }  
+63.    Derived1(int x, int y, int z, int t) : Base(x, y, z)  
+64.    {  
+65.        d1 = t;  
+66.        // cout << "constructing Derived1, a = " << a << ", b = " << b << ", c = " << c << "d1 = " << d1 << endl;  
+67.        // 报错，私有数据 c 虽然被子类继承，但是不可见，即具有不可访问属性  
+68.        cout << "constructing Derived1, a = " << a << ", b = " << b << ", c = " << get_c() << ", d1 = " << d1 << endl;  
+69.    }  
+70.    ~Derived1()  
+71.    {  
+72.        cout << "destructing Derived1, a = " << a << ", b = " << b << ", c = " << get_c() << ", d1 = " << d1 << endl;  
+73.    }  
+74.    int get_d1()  
+75.    {  
+76.        return d1;  
+77.    }  
+78.};  
+79.  
+80.class Derived2 : protected Base   
+81.{  
+82.private:  
+83.    int d2;  
+84.public:  
+85.    Derived2()  
+86.    {  
+87.        cout << "constructing Derived2, a = " << a << ", b = " << b << ", c = " << get_c() << ", d2 = " << d2 << endl;  
+88.    }  
+89.    Derived2(int x, int y, int z, int t) : Base(x, y, z)  
+90.    {  
+91.        d2 = t;  
+92.        cout << "constructing Derived2, a = " << a << ", b = " << b << ", c = " << get_c() << ", d2 = " << d2 << endl;  
+93.    }  
+94.    ~Derived2()   
+95.    {  
+96.        cout << "destructing Derived2, a = " << a << ", b = " << b << ", c = " << get_c() << ", d2 = " << d2 << endl;  
+97.    }  
+98.    int get_d2()  
+99.    {  
+100.        return d2;  
+101.    }  
+102.    int Get_a()  
+103.    {  
+104.        return a;  
+105.    }  
+106.    int Get_b()  
+107.    {  
+108.        return b;  
+109.    }  
+110.    int Get_c()  
+111.    {  
+112.        return get_c();// 通过派生类公有函数访问基类继承变为保护的成员函数，进而访问私有数据成员  
+113.    }  
+114.};  
+115.  
+116.class Derived3 : private Base  
+117.{  
+118.private:  
+119.    int d3;  
+120.public:  
+121.    Derived3()  
+122.    {  
+123.        cout << "constructing Derived3, a = " << a << ", b = " << b << ", c = " << get_c() << ", d3 = " << d3 << endl;  
+124.    }  
+125.    Derived3(int x, int y, int z, int t) : Base(x, y, z)  
+126.    {  
+127.        d3 = t;  
+128.        cout << "constructing Derived3, a = " << a << ", b = " << b << ", c = " << get_c() << ", d3 = " << d3 << endl;  
+129.    }  
+130.    ~Derived3()  
+131.    {  
+132.        cout << "destructing Derived3, a = " << a << ", b = " << b << ", c = " << get_c() << ", d3 = " << d3 << endl;  
+133.    }  
+134.    int get_d3()  
+135.    {  
+136.        return d3;  
+137.    }  
+138.};  
+139.  
+140.int Base::statistic()  
+141.{  
+142.    return cnt;  
+143.}  
+144.  
+145.int main()  
+146.{  
+147.    Base t(1, 2, 3);  
+148.    cout << "count = " << Base::statistic() << endl << endl;  
+149.    Derived1 x(4, 5, 6, 7);  
+150.    cout << "count = " << Base::statistic() << endl << endl;  
+151.    Derived2 y(8, 9, 10, 11);  
+152.    cout << "count = " << Base::statistic() << endl << endl;  
+153.    Derived3 z(12, 13, 14, 15);  
+154.    cout << "count = " << Base::statistic() << endl << endl;  
+155.  
+156.    //cout << "x.a = " << x.a << ", x.b = " << x.b << "x.d1 = " << x.d1 << endl;  
+157.    // b, d1  不可直接访问  
+158.    cout << "x.a = " << x.a << ", x.b = " << x.get_b() << ", x.d1 = " << x.get_d1() << endl << endl;  
+159.  
+160.    //cout << "y.a = " << y.a << endl;  
+161.    // a 不可直接访问  
+162.    //cout << "y.a = " << y.get_a() << endl;  
+163.    // get_a() 不可直接访问  
+164.    cout << "y.a = " << y.Get_a() << endl << endl;  
+165.  
+166.    cout << "y.c = " << y.Get_c() << endl << endl;  
+167.  
+168.    return 0;  
+169.}  
+
+任务二：
+
+1.#include <iostream>  
+2.  
+3.using namespace std;  
+4.  
+5.class Location  
+6.{  
+7.protected:  
+8.    double x, y;  
+9.public:  
+10.    Location(double a, double b)  
+11.    {  
+12.        x = a;  
+13.        y = b;  
+14.    }  
+15.    ~Location()  
+16.    {  
+17.  
+18.    }  
+19.  
+20.    void move(double a, double b) //将坐标移动到 (a, b)   
+21.    {  
+22.        x = a;  
+23.        y = b;  
+24.    }  
+25.    void move_add(double a, double b) //将坐标 (x, y) 分别增加 a, b 个单位，移动到 (x+a, y+b)  
+26.    {  
+27.        x += a;  
+28.        y += b;  
+29.    }  
+30.    double get_x()  
+31.    {  
+32.        return x;  
+33.    }  
+34.    double get_y()  
+35.    {  
+36.        return y;  
+37.    }  
+38.    void show()  
+39.    {  
+40.        cout << "the location is : (x, y) = " << "(" << x << ", " << y << ")" << endl << endl;  
+41.    }  
+42.};  
+43.  
+44.class Point : public Location  
+45.{  
+46.protected:  
+47.    double z;  
+48.public:  
+49.    Point(double a, double b, double c) : Location(a, b)  
+50.    {  
+51.        z = c;  
+52.    }  
+53.    ~Point()  
+54.    {  
+55.  
+56.    }  
+57.  
+58.    void move(double a, double b, double c)  
+59.    {  
+60.        x = a;  
+61.        y = b;  
+62.        z = c;  
+63.    }  
+64.    void move_add(double a, double b, double c) //将点 (x, y, z) 的3个坐标分别增加 a, b, c 个单位，移动到 (x+a, y+b, z+c)  
+65.    {  
+66.        x += a;  
+67.        y += b;  
+68.        z += c;  
+69.    }  
+70.    double get_z()  
+71.    {  
+72.        return z;  
+73.    }  
+74.    void show()  
+75.    {  
+76.        cout << "the point's location is : (x, y, z) = " << "(" << x << ", " << y << ", " << z << ")" << endl << endl;  
+77.    }  
+78.};  
+79.  
+80.class Sphere : public Point  
+81.{  
+82.protected:  
+83.    const double PI; //圆周率   
+84.    double r, S, V; //半径，表面积，体积   
+85.public:  
+86.    Sphere(double a, double b, double c, double rr) : Point(a, b, c), PI(3.1415926) //初始化常数据成员   
+87.    {  
+88.        r = rr;  
+89.        S = 4.0*PI*r*r;  
+90.        V = 4 / 3 * PI*r*r*r;  
+91.    }  
+92.    ~Sphere()  
+93.    {  
+94.  
+95.    }  
+96.  
+97.    void modify_r(double rr) //半径修改为 rr   
+98.    {  
+99.        r = rr;  
+100.        S = 4.0*PI*r*r;  
+101.        V = 4 / 3 * PI*r*r*r;  
+102.  
+103.    }  
+104.    void add_r(double rr) //半径增加 rr   
+105.    {  
+106.        r += rr;  
+107.        S = 4.0*PI*r*r;  
+108.        V = 4 / 3 * PI*r*r*r;  
+109.    }  
+110.    double get_r()  
+111.    {  
+112.        return r;  
+113.    }  
+114.    double get_S()  
+115.    {  
+116.        return S;  
+117.    }  
+118.    double get_V()  
+119.    {  
+120.        return V;  
+121.    }  
+122.    void show()  
+123.    {  
+124.        cout << "the sphere's location is :  (x, y, z) = " << "(" << x << ", " << y << ", " << z << ")" << endl;  
+125.        cout << "The radius is r = " << r << "\nthe area is S = " << S << "\nthe volume is V = " << V << endl << endl;  
+126.    }  
+127.};  
+128.  
+129.int main()  
+130.{  
+131.    Location a(3, 4);  
+132.    //cout << "a.x = " << a.x << ", a.y = " << a.y << endl; //报错，不可访问  
+133.    cout << "a.x = " << a.get_x() << ", a.y = " << a.get_y() << endl;  
+134.    a.move(1, 2);  
+135.    cout << "after move(1, 2), ";  
+136.    a.show();  
+137.    a.move_add(1, 2);  
+138.    cout << "after move_add(1, 2), ";  
+139.    a.show();  
+140.  
+141.    Point b(5, 6, 7);  
+142.    //cout << "b.x = " << b.x << ", b.y = " << b.y << ", b.z = " << b.z << endl;//报错，不可访问  
+143.    cout << "b.x = " << b.get_x() << ", b.y = " << b.get_y() << ", b.z = " << b.get_z() << endl;  
+144.    b.move(3, 4, 5);  
+145.    cout << "after move(3, 4, 5), ";  
+146.    b.show();  
+147.    b.move_add(5, 6, 7);  
+148.    cout << "after move_add(5, 6, 7), ";  
+149.    b.show();  
+150.  
+151.    Sphere c(8, 9, 10, 11);  
+152.    //cout << "c.x = " << c.x << ", c.y = " << c.y << ", c.z = " << c.z << ", c.r = " << c.r << endl; //报错，不可访问  
+153.    cout << "c.x = " << c.get_x() << ", c.y = " << c.get_y() << ", c.z = " << c.get_z() << ", c.r = " << c.get_r() << endl;  
+154.    c.move(1, 2, 3);  
+155.    cout << "after move(1, 2, 3), ";  
+156.    c.show();  
+157.    c.move_add(3, 4, 5);  
+158.    cout << "after move_add(3, 4, 5), ";  
+159.    c.show();  
+160.    c.modify_r(3);  
+161.    cout << "after modify_r(3), ";  
+162.    c.show();  
+163.    c.add_r(6);  
+164.    cout << "after add_r(6), ";  
+165.    c.show();  
+166.  
+167.    return 0;  
+168.}  
+
+4.1：
+
+·  
+#include <iostream>  
+·    
+·  using namespace std;  
+·    
+·  class A  
+·  {  
+·      int n;  
+·  public:  
+·      A()  
+·      {  
+·          cout << "construting A" << endl;  
+·      }  
+·      ~A()  
+·      {  
+·          cout << "destructing A" << endl;  
+·      }  
+·  };  
+·    
+·  class B  
+·  {  
+·      int n;  
+·      A a;  
+·  public:  
+·      B()  
+·      {  
+·          cout << "construting B" << endl;  
+·      }  
+·      ~B()  
+·      {  
+·          cout << "destructing B" << endl;  
+·      }  
+·  };  
+·    
+·  int main()  
+·  {  
+·      B b;  
+·      cout << "The end." << endl;  
+·      return 0;  
+·  }  
+
+4.2：
+
+·  
+#include <iostream>  
+·    
+·  using namespace std;  
+·    
+·  class A  
+·  {  
+·      int n;  
+·  public:  
+·      A(int x)  
+·      {  
+·          n = x;  
+·          cout << "construting A, n = " << n << endl;  
+·      }  
+·      ~A()  
+·      {  
+·          cout << "destructing A, n = " << n << endl;  
+·      }  
+·  };  
+·    
+·  class B  
+·  {  
+·      int n;  
+·      A a;  
+·  public:  
+·      B(int x, int y): a(x) //有参在初始化列表中解决   
+·      {  
+·          n = y;  
+·          cout << "construting B, n = " << n << endl;  
+·      }  
+·      ~B()  
+·      {  
+·          cout << "destructing B, n = " << n << endl;  
+·      }  
+·  };  
+·    
+·  class C  
+·  {  
+·      int n;  
+·      A a;  
+·      B b;  
+·  public:  
+·      C(int x, int y, int z) : a(x * 2), b(x, y)  
+·      {  
+·          n = z;  
+·          cout << "construting C, n = " << n << endl;  
+·      }  
+·      ~C()  
+·      {  
+·          cout << "destructing C, n = " << n << endl;  
+·      }  
+·  };  
+·  int main()  
+·  {  
+·      C obj(5, 6, 7);  
+·      return 0;  
+·  }  
+
+4.3：
+
+·  
+#include <iostream>  
+·    
+·  using namespace std;  
+·    
+·  class A  
+·  {  
+·  public:  
+·      A()  
+·      {  
+·          cout << 'A';  
+·      }  
+·  };  
+·    
+·  class B  
+·  {  
+·  public:  
+·      B()  
+·      {  
+·          cout << 'B';  
+·      }  
+·  };  
+·    
+·  class C: public A  
+·  {  
+·  public:  
+·      C()  
+·      {  
+·          cout << 'C';  
+·      }  
+·  };  
+·    
+·  class D : public A, public B  
+·  {  
+·  public:  
+·      D()  
+·      {  
+·          cout << 'D';  
+·      }  
+·  };  
+·    
+·  class E :public B, public virtual C  
+·  {  
+·  public:  
+·      D d;  
+·      E()  
+·      {  
+·          cout << 'E';  
+·      }  
+·  };  
+·    
+·  class F: public virtual C, public D, public E  
+·  {  
+·  public:  
+·      C c, d;  
+·      E e;  
+·      F()  
+·      {  
+·          cout << 'F';  
+·      }  
+·  };  
+·    
+·  int main()  
+·  {  
+·      A a;  
+·      cout << endl;  
+·      B b;  
+·      cout << endl;  
+·      C c;  
+·      cout << endl;  
+·      D d;          //ABD   
+·      cout << endl;  
+·      E e;          //ACBABDE   
+·      cout << endl;  
+·      F f;          //ACABDBABDEACACACBABDEF   
+·      cout << endl;  
+·    
+·      return 0;  
+·  }  
+
+4.4：
+
+·  
+#include <iostream>  
+·    
+·  using namespace std;  
+·    
+·  class X  
+·  {  
+·  public:  
+·      X()  
+·      {  
+·          cout << "X::X() constructor executing\n";  
+·      }  
+·      ~X()  
+·      {  
+·          cout << "X::~X() destructor executing\n";  
+·      }  
+·  };  
+·    
+·  class Y: public X  
+·  {  
+·  public:  
+·      Y()  
+·      {  
+·          cout << "Y::Y() constructor executing\n";  
+·      }  
+·      ~Y()  
+·      {  
+·          cout << "Y::~Y() destructor executing\n";  
+·      }  
+·  };  
+·    
+·  class Z : public Y  
+·  {  
+·  public:  
+·      Z()  
+·      {  
+·          cout << "Z::Z() constructor executing\n";  
+·      }  
+·      ~Z()  
+·      {  
+·          cout << "Z::~Z() destructor executing\n";  
+·      }  
+·  };  
+·    
+·  int main()  
+·  {  
+·      Z z;  
+·      return 0;  
+·  }  
+
+4.5：
+
+·  
+#include <iostream>  
+·    
+·  using namespace std;  
+·    
+·  class A  
+·  {  
+·  public:  
+·      int n;  
+·  };  
+·    
+·  class B: virtual public A  
+·  {  
+·    
+·  };  
+·    
+·  class C : virtual public A  
+·  {  
+·    
+·  };  
+·    
+·  class D : public B, public C  
+·  {  
+·    
+·  };  
+·    
+·  inline void print(D &d)  
+·  {  
+·      cout << "d.A::n = " << d.A::n << ", d.B::n = " << d.B::n;  
+·      cout << ", d.C::n = " << d.C::n << ", d.D::n = " << d.n << endl;  
+·  }  
+·    
+·  int main()  
+·  {  
+·      D d;  
+·      d.A::n = 10;  
+·      print(d);  
+·    
+·      d.B::n = 20;  
+·      print(d);  
+·    
+·      d.C::n = 30;  
+·      print(d);  
+·    
+·      d.n = 40;  
+·      print(d);  
+·    
+·      return 0;  
+·  }  
+
+4.6：
+
+·  
+#include <iostream>  
+·    
+·  using namespace std;  
+·    
+·  class X  
+·  {  
+·  public:  
+·      void f()  
+·      {  
+·          cout << "X::f() executing\n";  
+·      }  
+·  };  
+·    
+·  class Y: public X  
+·  {  
+·  public:  
+·      void f()  
+·      {  
+·          cout << "Y::f() executing\n";  
+·      }  
+·  };  
+·    
+·  int main()  
+·  {  
+·      X x;  
+·      Y y;  
+·    
+·      X *p = &x;  
+·      p->f();  
+·    
+·      p = &y;  
+·      p->f(); //复制兼容，Y中的f()算派生类新增成员，不可访问，所以调用的是基类X中的f()  
+·    
+·      y.f(); //同名覆盖，调用Y中的f()  
+·    
+·      return 0;  
+·  }  
